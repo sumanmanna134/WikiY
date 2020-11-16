@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwiki/Model/Model.dart';
 import 'package:flutterwiki/Service/Api_Manager.dart';
+import 'package:flutterwiki/View/webview.dart';
 import 'package:flutterwiki/bloc.dart';
 import 'package:flutterwiki/utils/Constant.dart';
 import 'package:hive/hive.dart';
@@ -126,56 +127,64 @@ class _MyAppState extends State<MyApp> {
               }else{
                 return ListView.builder(
                     itemCount: data.length,
+
                     itemBuilder: (context, index) {
-                      return Container(
-                        padding: EdgeInsets.only(top: 10,left: 9, right: 9),
-                        height: 70,
-                        child: Row(
-                          children: <Widget>[
-                            Card(
-                              clipBehavior: Clip.antiAlias,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
+                      return InkWell(
+                        child: Container(
+                          padding: EdgeInsets.only(top: 10,left: 9, right: 9),
+                          height: 70,
+                          child: Row(
+                            children: <Widget>[
+                              Card(
+                                clipBehavior: Clip.antiAlias,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                                child: FittedBox(
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      child: CachedNetworkImage(
+                                        placeholder: (context, url) => CircularProgressIndicator(),
+
+                                        imageUrl:data[index]["thumbnail"]==null?"https://img2.pngio.com/index-of-areaedu-wp-content-uploads-2016-02-default-png-600_600.png":data[index]["thumbnail"]["source"],
+                                        height: 50,
+                                        width: 50,
+
+                                      ),
+                                    )),
                               ),
-                              child: FittedBox(
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(
-                                      placeholder: (context, url) => CircularProgressIndicator(),
+                              SizedBox(width: 16),
+                            Flexible(
 
-                                      imageUrl:data[index]["thumbnail"]==null?"https://img2.pngio.com/index-of-areaedu-wp-content-uploads-2016-02-default-png-600_600.png":data[index]["thumbnail"]["source"],
-                                      height: 50,
-                                      width: 50,
-
-                                    ),
-                                  )),
-                            ),
-                            SizedBox(width: 16),
-                          Flexible(
-                            
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  data[index]['title'],
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Flexible(
-                                  fit: FlexFit.loose,
-                                  child: Text(
-                                    data[index]['terms']==null?"No Decription":data[index]['terms']['description'][0],
-                                    maxLines: 5,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    data[index]['title'],
                                     overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                ),
-                              ],
+                                  Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Text(
+                                      data[index]['terms']==null?"No Decription":data[index]['terms']['description'][0],
+                                      maxLines: 5,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
+                            ],
                           ),
-                          ],
                         ),
+                        onTap: (){
+                          print(data[index]['title']);
+                          Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => WebViewPage(title: data[index]['title'],)),);
+                        },
                       );
                     });
               }
