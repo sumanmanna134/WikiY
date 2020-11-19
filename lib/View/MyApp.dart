@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   List data = [];
   Future wikidata;
   Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text( 'Search ' );
+  Widget _appBarTitle = new Text( "Search", );
   TextEditingController searchController=new TextEditingController();
   Future<bool> getWiki({String keyWord}) async{
     await openBox();
@@ -72,19 +72,20 @@ class _MyAppState extends State<MyApp> {
       if(this._searchIcon.icon == Icons.search){
         this._searchIcon = new Icon(Icons.close);
         this._appBarTitle = TextField(
+          style: const TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'Open Sans'),
           controller: searchController,
-          cursorColor: Colors.white70,
-          decoration:  InputDecoration(
-            fillColor: Colors.white70,
-
-            hintText: "Search",
+          autofocus: true,
+          decoration: const InputDecoration(
+            hintText: 'Search...',
+            border: InputBorder.none,
+            hintStyle: const TextStyle(color: Colors.white30),
           ),
 
         );
 
       }else{
 
-        this._appBarTitle = new Text('Search');
+        this._appBarTitle = new Text("Search");
         this._searchIcon = new Icon(Icons.search);
         searchController.clear();
       }
@@ -111,11 +112,13 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  AppBar(title: _appBarTitle,
-        leading: IconButton(icon: this._searchIcon, onPressed: (){
+        leading: IconButton(icon: this._searchIcon ,
+            onPressed: (){
           _searchPressed();
         }),
       ),
       body: Container(
+        color: Colors.white,
 
         child: FutureBuilder(
           future: wikidata,
